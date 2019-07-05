@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title= `${title} | ${h.siteName}`
+    title= `${title || 'Hi'} | ${_u.siteName}`
     link(rel='stylesheet', href='/dist/style.css')
     link(rel="shortcut icon" type="image/png" href="/images/icons/doughnut.png")
     meta(name="viewport" content="width=device-width, initial-scale=1")
@@ -12,11 +12,11 @@ html
           .nav__section.nav__section--pages
             li.nav__item
               a.nav__link.nav__link--logo(href="/")
-                != h.icon('logo')
-            each item in h.menu
+                != _u.icon('logo')
+            each item in _u.menu
               li.nav__item
                 a.nav__link(href=item.slug, class=(currentPath.startsWith(item.slug) ? 'nav__link--active' : ''))
-                  != h.icon(item.icon)
+                  != _u.icon(item.icon)
                   span #{item.title}
           .nav__section.nav__section--search
             .search
@@ -25,10 +25,10 @@ html
           .nav__section.nav__section--user
             if user
               li.nav__item: a.nav__link(href="/hearts", class=(currentPath.startsWith('/hearts') ? 'nav__link--active' : ''))
-                != h.icon('heart')
+                != _u.icon('heart')
                 span.heart-count #{user.hearts && user.hearts.length}
               li.nav__item: a.nav__link(href="/logout", class=(currentPath.startsWith('/logout') ? 'nav__link--active' : ''))
-                != h.icon('logout')
+                != _u.icon('logout')
                 span Logout
               li.nav__item: a.nav__link(href="/account", class=(currentPath.startsWith('/account') ? 'nav__link--active' : ''))
                 img.avatar(src=user.gravatar + '&d=retro')
@@ -48,11 +48,12 @@ html
                   button.flash__remove(onClick="this.parentElement.remove()") &times;
     .content
       block content
-        p This is the default.
+        .inner
+          p This is the default.
 
     footer
       block footer
-        p (C) Jordan Janzen
+        p &copy; Jordan Janzen
 
     block scripts
       script(src=`https://maps.googleapis.com/maps/api/js?key=${process.env.MAP_KEY}&libraries=places`)

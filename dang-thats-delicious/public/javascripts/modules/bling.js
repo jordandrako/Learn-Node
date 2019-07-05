@@ -3,16 +3,21 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-Node.prototype.on = window.on = function (name, fn) {
+function on(name, fn) {
   this.addEventListener(name, fn);
-};
+}
 
+window.on = on;
+Node.prototype.on = window.on;
 NodeList.prototype.__proto__ = Array.prototype; // eslint-disable-line
 
-NodeList.prototype.on = NodeList.prototype.addEventListener = function (name, fn) {
-  this.forEach((elem) => {
+function addEL(name, fn) {
+  this.forEach(elem => {
     elem.on(name, fn);
   });
-};
+}
+
+NodeList.prototype.addEventListener = addEL;
+NodeList.prototype.on = NodeList.prototype.addEventListener;
 
 export { $, $$ };

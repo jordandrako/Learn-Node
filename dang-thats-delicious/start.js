@@ -13,14 +13,15 @@ if (major < 7 || (major === 7 && minor <= 5)) {
 // import environmental variables from our variables.env file
 require('dotenv').config({ path: 'variables.env' });
 
+// mongoose default options
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useCreateIndex', true);
+
 // Connect to our Database and handle any bad connections
 if (process.env.DATABASE.indexOf('+srv') > -1 && process.env.DBNAME) {
-  mongoose.connect(process.env.DATABASE, {
-    useNewUrlParser: true,
-    dbName: process.env.DBNAME
-  });
+  mongoose.connect(process.env.DATABASE, { dbName: process.env.DBNAME });
 } else {
-  mongoose.connect(process.env.DATABASE, { useNewUrlParser: true });
+  mongoose.connect(process.env.DATABASE);
 }
 mongoose.Promise = global.Promise; // Tell Mongoose to use ES6 promises
 mongoose.connection.on('error', err => {
@@ -28,6 +29,11 @@ mongoose.connection.on('error', err => {
 });
 
 // READY?! Let's go!
+
+// import all our models
+// READY?! Let's go!
+// import all our models
+require('./models/Store').default; // eslint-disable-line no-unused-expressions
 
 // Start our app!
 const app = require('./app');

@@ -1,6 +1,5 @@
 const express = require('express');
 const session = require('express-session');
-const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -9,9 +8,10 @@ const passport = require('passport');
 const promisify = require('es6-promisify');
 const flash = require('connect-flash');
 const expressValidator = require('express-validator');
-const routes = require('./routes/index');
-const helpers = require('./helpers');
+const mongoose = require('mongoose');
+const routes = require('./routes/routes');
 const errorHandlers = require('./handlers/errorHandlers');
+const utilites = require('./utilities');
 
 // create our Express app
 const app = express();
@@ -54,10 +54,13 @@ app.use(flash());
 
 // pass variables to our templates + all requests
 app.use((req, res, next) => {
-  res.locals.h = helpers;
-  res.locals.flashes = req.flash();
-  res.locals.user = req.user || null;
-  res.locals.currentPath = req.path;
+  res.locals = {
+    ...res.locals,
+    _u: utilites,
+    flashes: req.flash(),
+    user: req.user || null,
+    currentPath: req.path
+  };
   next();
 });
 
